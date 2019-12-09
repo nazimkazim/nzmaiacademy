@@ -43,6 +43,12 @@ const PostSchema = new Schema({
       date: {
         type: Date,
         default: Date.now
+      },
+      name: {
+        type: String
+      },
+      avatar: {
+        type: String
       }
     }
   ],
