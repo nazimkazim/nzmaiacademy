@@ -1,5 +1,6 @@
 import React from "react";
 import { Grid, Button } from "semantic-ui-react";
+import { Link } from "react-router-dom";
 import {
   FullHeightContainer,
   CenteredPlate
@@ -12,9 +13,13 @@ const Landing = () => {
         <Grid.Column width={16}>
           <CenteredPlate>
             <Button.Group size="large">
-              <Button>Register</Button>
+              <Button>
+                <Link to="/login">Register</Link>
+              </Button>
               <Button.Or />
-              <Button>Sign in</Button>
+              <Button>
+                <Link to="/login"> Sign in</Link>
+              </Button>
             </Button.Group>
           </CenteredPlate>
         </Grid.Column>
