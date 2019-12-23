@@ -14,7 +14,7 @@ const Landing = () => {
           <CenteredPlate>
             <Button.Group size="large">
               <Button>
-                <Link to="/login">Register</Link>
+                <Link to="/register">Register</Link>
               </Button>
               <Button.Or />
               <Button>
