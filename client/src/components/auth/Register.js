@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { Button, Form, Grid, Header } from "semantic-ui-react";
+import { connect } from "react-redux";
+import { setAlert } from "../../actions/alert";
 import axios from "axios";
+import PropTypes from "prop-types";
 
-const FormExampleForm = () => {
+const Register = ({ setAlert }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -18,7 +21,7 @@ const FormExampleForm = () => {
   const onSubmit = async e => {
     e.preventDefault();
     if (password !== password2) {
-      console.log("passwords do not match");
+      setAlert("passwords do not match", "warning black");
     } else {
       const newUser = {
         name,
@@ -90,4 +93,8 @@ const FormExampleForm = () => {
   );
 };
 
-export default FormExampleForm;
+Register.propTypes = {
+  setAlert: PropTypes.func.isRequired
+};
+
+export default connect(null, { setAlert })(Register);
