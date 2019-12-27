@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { Button, Form, Grid, Header } from "semantic-ui-react";
-import axios from "axios";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { login } from "../../actions/auth";
+import { Link, Redirect } from "react-router-dom";
 
-const Login = () => {
+const Login = ({ login, isAuthenticated }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: ""
@@ -15,8 +18,13 @@ const Login = () => {
 
   const onSubmit = async e => {
     e.preventDefault();
-    console.log("success");
+    login(email, password);
   };
+
+  // Redirect if logged in
+  if (isAuthenticated) {
+    return <Redirect to="dashboard" />;
+  }
   return (
     <Grid centered columns={1}>
       <Grid.Column width={8}>
@@ -48,4 +56,13 @@ const Login = () => {
   );
 };
 
-export default Login;
+Login.propTypes = {
+  login: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool
+};
+
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+});
+
+export default connect(mapStateToProps, { login })(Login);
