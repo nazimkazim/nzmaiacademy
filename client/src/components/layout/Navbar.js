@@ -1,48 +1,76 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { Menu, Segment } from "semantic-ui-react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { logout } from "../../actions/auth";
 
-export default class Navbar extends Component {
-  state = { activeItem: "home" };
+const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
+  //state = { activeItem: "home" };
+  const [activeItem, handleItemClick] = useState("");
 
-  handleItemClick = (e, { name }) => this.setState({ activeItem: name });
+  //handleItemClick = (e, { name }) => this.setState({ activeItem: name });
 
-  render() {
-    const { activeItem } = this.state;
+  //const { activeItem } = this.state;
+  const authLinks = (
+    <Link to="/">
+      <Menu.Item
+        name="logout"
+        active={activeItem === "home"}
+        onClick={logout}
+      />
+    </Link>
+  );
 
-    return (
-      <Segment inverted>
-        <Menu inverted secondary attached>
-          <Link to="/">
-            <Menu.Item
-              name="home"
-              active={activeItem === "home"}
-              onClick={this.handleItemClick}
-            />
-          </Link>
-          <Link to="/register">
-            <Menu.Item
-              name="register"
-              active={activeItem === "register"}
-              onClick={this.handleItemClick}
-            />
-          </Link>
-          <Link to="/login">
-            <Menu.Item
-              name="login"
-              active={activeItem === "login"}
-              onClick={this.handleItemClick}
-            />
-          </Link>
-          <Link to="/lessons">
-            <Menu.Item
-              name="lessons"
-              active={activeItem === "lessons"}
-              onClick={this.handleItemClick}
-            />
-          </Link>
-        </Menu>
-      </Segment>
-    );
-  }
-}
+  const guestLinks = (
+    <>
+      <Link to="/">
+        <Menu.Item
+          name="home"
+          active={activeItem === "home"}
+          onClick={e => handleItemClick(e.target.name)}
+        />
+      </Link>
+      <Link to="/register">
+        <Menu.Item
+          name="register"
+          active={activeItem === "register"}
+          onClick={e => handleItemClick}
+        />
+      </Link>
+      <Link to="/login">
+        <Menu.Item
+          name="login"
+          active={activeItem === "login"}
+          onClick={e => handleItemClick}
+        />
+      </Link>
+      <Link to="/lessons">
+        <Menu.Item
+          name="lessons"
+          active={activeItem === "lessons"}
+          onClick={e => handleItemClick}
+        />
+      </Link>
+    </>
+  );
+
+  return (
+    <Segment inverted>
+      <Menu inverted secondary attached>
+        {!loading && <>{isAuthenticated ? authLinks : guestLinks}</>}
+      </Menu>
+    </Segment>
+  );
+};
+
+Navbar.propTypes = {
+  logout: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+export default connect(mapStateToProps, { logout })(Navbar);
