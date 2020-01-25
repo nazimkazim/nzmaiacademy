@@ -1,12 +1,17 @@
 import React from "react";
 import { Grid, Button } from "semantic-ui-react";
-import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { Link, Redirect } from "react-router-dom";
+import { PropTypes } from "prop-types";
 import {
   FullHeightContainer,
   CenteredPlate
 } from "../../modules/StyledComponents";
 
-const Landing = () => {
+const Landing = ({ isAuthenticated }) => {
+  if (isAuthenticated) {
+    return <Redirect to="/dashboard" />;
+  }
   return (
     <FullHeightContainer>
       <Grid>
@@ -28,4 +33,12 @@ const Landing = () => {
   );
 };
 
-export default Landing;
+Landing.propTypes = {
+  isAuthenticated: PropTypes.bool
+};
+
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+});
+
+export default connect(mapStateToProps)(Landing);

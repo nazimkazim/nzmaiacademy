@@ -13,13 +13,18 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
 
   //const { activeItem } = this.state;
   const authLinks = (
-    <Link to="/">
-      <Menu.Item
-        name="logout"
-        active={activeItem === "home"}
-        onClick={logout}
-      />
-    </Link>
+    <>
+      <Link to="/">
+        <Menu.Item
+          name="logout"
+          active={activeItem === "logout"}
+          onClick={logout}
+        />
+      </Link>
+      <Link to="/dashboard">
+        <Menu.Item name="dashboard" active={activeItem === "dashboard"} />
+      </Link>
+    </>
   );
 
   const guestLinks = (
