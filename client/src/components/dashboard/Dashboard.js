@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { Button } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import DashboardActions from "./DashboardActions";
 import { getCurrentProfile } from "../../actions/profile";
 import Spinner from "../layout/Spinner";
 
@@ -21,7 +22,9 @@ const Dashboard = ({
       <h1>Dashboard</h1>
       <p>Welcome {user && user.name}</p>
       {profile !== null ? (
-        <>has</>
+        <>
+          <DashboardActions />
+        </>
       ) : (
         <>
           <p>You have not yet setup a profile</p>
