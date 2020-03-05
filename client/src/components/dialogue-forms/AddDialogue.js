@@ -82,6 +82,20 @@ class AddDialogue extends Component {
     }));
   }
 
+  addClick2() {
+    this.setState(prevState => ({
+      helpers: [
+        ...prevState.parts.helpers,
+        [
+          {
+            L1: "",
+            L2: ""
+          }
+        ]
+      ]
+    }));
+  }
+
   createUI() {
     return this.state.parts.map((el, i) => (
       <div key={i}>
@@ -120,40 +134,44 @@ class AddDialogue extends Component {
           onClick={this.removeClick.bind(this, i)}
         />
         <hr />
-        <div>{this.createUI2()}</div>
+        <div>{this.createUI2(i)}</div>
       </div>
     ));
   }
 
-  createUI2() {
-    return this.state.parts.map(part =>
-      part.helpers.map((i, el) => (
-        <div key={i}>
-          <TextFieldGroup
-            placeholder="Book"
-            info="type word in L1"
-            name="L1"
-            value={el.L1 || ""}
-            onChange={this.handleChange2.bind(this, i)}
-          />
-          <TextFieldGroup
-            placeholder="книга"
-            info="type word in L2"
-            name="L2"
-            value={el.L2 || ""}
-            onChange={this.handleChange2.bind(this, i)}
-          />
+  createUI2(i) {
+    return this.state.parts[i].helpers.map(el => (
+      <div key={i}>
+        <TextFieldGroup
+          placeholder="Book"
+          info="type word in L1"
+          name="L1"
+          value={el.L1 || ""}
+          onChange={this.handleChange2.bind(this, i)}
+        />
+        <TextFieldGroup
+          placeholder="книга"
+          info="type word in L2"
+          name="L2"
+          value={el.L2 || ""}
+          onChange={this.handleChange2.bind(this, i)}
+        />
 
-          <input
-            type="button"
-            value="remove"
-            className="btn btn-info btn-block mt-4"
-            onClick={this.removeClick2.bind(this, i)}
-          />
-          <hr />
-        </div>
-      ))
-    );
+        <input
+          type="button"
+          value="remove"
+          className="btn btn-info btn-block mt-4"
+          onClick={this.removeClick2.bind(this, i)}
+        />
+        <input
+          type="button"
+          value="add more"
+          className="btn btn-info btn-block mt-4"
+          onClick={this.addClick2.bind(this)}
+        />
+        <hr />
+      </div>
+    ));
   }
 
   removeClick(i) {
@@ -163,9 +181,9 @@ class AddDialogue extends Component {
   }
 
   removeClick2(i) {
-    let parts = [...this.state.parts];
-    parts.splice(i, 1);
-    this.setState({ parts });
+    let helpers = [...this.state.parts[i].helpers];
+    helpers.splice(i, 1);
+    this.setState({ helpers });
   }
 
   render() {
@@ -219,12 +237,12 @@ class AddDialogue extends Component {
 
 AddDialogue.propTypes = {
   createDialogue: PropTypes.func.isRequired,
-  profile: PropTypes.object.isRequired,
+  dialogue: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  profile: state.profile,
+  dialogue: state.profile,
   errors: state.errors
 });
 
