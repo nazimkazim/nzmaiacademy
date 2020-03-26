@@ -84,16 +84,14 @@ class AddDialogue extends Component {
 
   addClick2() {
     this.setState(prevState => ({
-      helpers: [
-        ...prevState.parts.helpers,
-        [
-          {
-            L1: "",
-            L2: ""
-          }
-        ]
-      ]
-    }));
+      parts: prevState.parts.map(part => ({
+          ...part,
+          helpers: [
+              ...part.helpers,
+              { L1: '', L2: '' }
+          ]
+      }))
+  }))
   }
 
   createUI() {
@@ -133,7 +131,6 @@ class AddDialogue extends Component {
           className="btn btn-info btn-block mt-4"
           onClick={this.removeClick.bind(this, i)}
         />
-        <hr />
         <div>{this.createUI2(i)}</div>
       </div>
     ));

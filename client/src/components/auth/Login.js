@@ -40,11 +40,12 @@ const Login = ({ login, isAuthenticated }) => {
             />
           </Form.Field>
           <Form.Field>
-            <label>Passowrd</label>
+            <label>Passoword</label>
             <input
               placeholder="Password"
               name="password"
               value={password}
+              type="password"
               onChange={e => onChange(e)}
             />
           </Form.Field>
