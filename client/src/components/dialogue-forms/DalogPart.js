@@ -28,7 +28,10 @@ export default (props) => {
 
     const data = {...part};
     //new empty item by index
-    data.helpers = newHelpers.splice(index, {});
+    data.helpers = [
+      ...newHelpers,
+      {}
+    ];
     onChange(data);
   };
 
