@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { createDialogue } from "../../actions/dialogue";
 import { langPairOptions } from "../common/options";
+import DialogPart from "./DalogPart";
 
 class AddDialogue extends Component {
   constructor(props) {
@@ -52,139 +53,35 @@ class AddDialogue extends Component {
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
-
-  handleChange(i, e) {
-    const { name, value } = e.target;
-    let parts = [...this.state.parts];
-    parts[i] = { ...parts[i], [name]: value };
-    this.setState({ parts });
-  }
-
-  handleChange2(i, e) {
-    const { name, value } = e.target;
-    let helpers = [...this.state.helpers];
-    helpers[i] = { ...helpers[i], [name]: value };
-    this.setState({ helpers });
-  }
-
-  addClick() {
-    this.setState(prevState => ({
-      parts: [
-        ...prevState.parts,
-        {
-          sentence: "",
-          translation: "",
-          audio: "",
-          prompt: "",
-          helpers: [{ L1: "", L2: "" }]
-        }
-      ]
-    }));
-  }
-
-  addClick2() {
-    this.setState(prevState => ({
-      parts: prevState.parts.map(part => ({
-          ...part,
-          helpers: [
-              ...part.helpers,
-              { L1: '', L2: '' }
-          ]
-      }))
-  }))
-  }
-
-  createUI() {
-    return this.state.parts.map((el, i) => (
-      <div key={i}>
-        <TextFieldGroup
-          placeholder="I want some cheese"
-          info="type example sentence"
-          name="sentence"
-          value={el.sentence || ""}
-          onChange={this.handleChange.bind(this, i)}
-        />
-        <TextFieldGroup
-          placeholder="Я хочу сыра"
-          info="type translation of example sentence in Russian"
-          name="translation"
-          value={el.translation || ""}
-          onChange={this.handleChange.bind(this, i)}
-        />
-        <TextFieldGroup
-          placeholder="Audio"
-          info="type example sentence with latin"
-          name="audio"
-          value={el.audio}
-          onChange={this.handleChange.bind(this, i)}
-        />
-        <TextFieldGroup
-          placeholder="Give some hints to people"
-          info="Give some hints to people"
-          name="prompt"
-          value={el.prompt}
-          onChange={this.handleChange.bind(this, i)}
-        />
-        <input
-          type="button"
-          value="remove"
-          className="btn btn-info btn-block mt-4"
-          onClick={this.removeClick.bind(this, i)}
-        />
-        <div>{this.createUI2(i)}</div>
-      </div>
-    ));
-  }
-
-  createUI2(i) {
-    return this.state.parts[i].helpers.map(el => (
-      <div key={i}>
-        <TextFieldGroup
-          placeholder="Book"
-          info="type word in L1"
-          name="L1"
-          value={el.L1 || ""}
-          onChange={this.handleChange2.bind(this, i)}
-        />
-        <TextFieldGroup
-          placeholder="книга"
-          info="type word in L2"
-          name="L2"
-          value={el.L2 || ""}
-          onChange={this.handleChange2.bind(this, i)}
-        />
-
-        <input
-          type="button"
-          value="remove"
-          className="btn btn-info btn-block mt-4"
-          onClick={this.removeClick2.bind(this, i)}
-        />
-        <input
-          type="button"
-          value="add more"
-          className="btn btn-info btn-block mt-4"
-          onClick={this.addClick2.bind(this)}
-        />
-        <hr />
-      </div>
-    ));
-  }
-
-  removeClick(i) {
-    let parts = [...this.state.parts];
-    parts.splice(i, 1);
-    this.setState({ parts });
-  }
-
-  removeClick2(i) {
-    let helpers = [...this.state.parts[i].helpers];
-    helpers.splice(i, 1);
-    this.setState({ helpers });
-  }
-
   render() {
-    const { errors } = this.state;
+    const { errors, parts } = this.state;
+    const onChangePart = (index, part) => {
+      const newParts = parts.filter(() => true);
+      //update part by index
+      newParts[index] = part;
+
+      this.setState({parts: newParts});
+    };
+    const onAddPart = () => {
+      this.setState(prevState => ({
+        parts: [
+          ...prevState.parts,
+          {
+            sentence: "",
+            translation: "",
+            audio: "",
+            prompt: "",
+            helpers: [{ L1: "", L2: "" }]
+          }
+        ]
+      }));
+    };
+    const onRemovePart = (index) => {
+      //remove part by index
+      const newParts = parts.filter((value, cIndex) => cIndex !== index);
+      this.setState({parts: newParts});
+    };
+
     return (
       <div className="add-word">
         <div className="container">
@@ -211,12 +108,12 @@ class AddDialogue extends Component {
                   onChange={this.onChange}
                   error={errors.note}
                 />
-                <div>{this.createUI()}</div>
+                <div>{parts.map((part, index) => <DialogPart part={part} onChange={onChangePart.bind(null, index)} onRemove={onRemovePart.bind(null, index)}/>)}</div>
                 <input
                   type="button"
                   value="add more"
                   className="btn btn-info btn-block mt-4"
-                  onClick={this.addClick.bind(this)}
+                  onClick={onAddPart}
                 />
                 <input
                   type="submit"
