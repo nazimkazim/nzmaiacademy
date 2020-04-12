@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { createDialogue } from "../../actions/dialogue";
 import { langPairOptions } from "../common/options";
-import DialogPart from "./DalogPart";
+import DialogPart from "./DialogPart";
 
 class AddDialogue extends Component {
   constructor(props) {
