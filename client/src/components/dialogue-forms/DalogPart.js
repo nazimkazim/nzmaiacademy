@@ -15,7 +15,7 @@ export default (props) => {
   } = part;
 
   const onRemoveHelper = (index) => {
-    const newHelpers = part.filter((value, arrIndex) => index !== arrIndex);
+    const newHelpers = helpers.filter((value, arrIndex) => index !== arrIndex);
 
     const data = {...part};
     data.helpers = newHelpers;
@@ -23,14 +23,12 @@ export default (props) => {
   };
 
   const onAddMoreHelper = (index) => {
-    //copy helpers
-    const newHelpers = helpers.filter(() => true);
-
+    //add new empty item by position index to exists list
+    helpers.splice(index + 1, 0, {});
     const data = {...part};
     //new empty item by index
     data.helpers = [
-      ...newHelpers,
-      {}
+      ...helpers
     ];
     onChange(data);
   };
@@ -41,6 +39,11 @@ export default (props) => {
     //change value by property name
     data[propertyName] = e.target.value;
     onChange(data);
+  };
+
+  const onChangeHelper = (index, helper) => {
+    part.helpers[index] = helper;
+    onChange(part);
   };
 
   return (
@@ -82,6 +85,7 @@ export default (props) => {
       <div>
         {helpers.map((value, index) => <DialogHelper key={index}
                                                    helper={helpers[index]}
+                                                   onChange={onChangeHelper.bind(null, index)}
                                                    onRemove={onRemoveHelper.bind(null, index)}
                                                    onAddMore={onAddMoreHelper.bind(null, index)}/>)
         }
