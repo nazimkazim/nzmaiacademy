@@ -85,7 +85,6 @@ class AddDialogue extends Component {
   addClick2() {
     this.setState(prevState => ({
       parts: prevState.parts.map(part => ({
-          ...part,
           helpers: [
               ...part.helpers,
               { L1: '', L2: '' }
