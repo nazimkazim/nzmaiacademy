@@ -41,7 +41,7 @@ export default (props) => {
   };
 
   return (
-    <div key={i}>
+    <div>
       <TextFieldGroup
         placeholder="I want some cheese"
         info="type example sentence"
@@ -77,7 +77,7 @@ export default (props) => {
         onClick={onRemove}
       />
       <div>
-        {helpers.map(value, index => <DialogHelper key={index}
+        {helpers.map((value, index) => <DialogHelper key={index}
                                                    helper={helpers[index]}
                                                    onRemove={onRemoveHelper.bind(null, index)}
                                                    onAddMore={onAddMoreHelper.bind(null, index)}/>)
