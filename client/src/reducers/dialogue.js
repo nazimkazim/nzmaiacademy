@@ -13,7 +13,7 @@ export default function(state = initialState, action) {
     case CREATE_DIALOGUE:
       return {
         ...state,
-        profile: [payload, ...state.dialogues],
+        dialogue: [payload, ...state.dialogues],
         loading: false
       };
     default:

@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { createDialogue } from "../../actions/dialogue";
 import { langPairOptions } from "../common/options";
-import DialogPart from "./DalogPart";
+import DialogPart from "./DaialogPart";
 
 class AddDialogue extends Component {
   constructor(props) {
@@ -46,7 +46,7 @@ class AddDialogue extends Component {
       note: this.state.note,
       parts: this.state.parts
     };
-    //this.props.addWord(wordData, this.props.history);
+    this.props.createDialogue(wordData, this.props.history);
     console.log(wordData);
   }
 
@@ -136,7 +136,7 @@ AddDialogue.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  dialogue: state.profile,
+  dialogue: state.dialogue,
   errors: state.errors
 });
 
