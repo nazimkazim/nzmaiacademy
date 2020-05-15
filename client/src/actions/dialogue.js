@@ -20,7 +20,7 @@ export const createDialogue = (
       type: CREATE_DIALOGUE,
       payload: res.data
     });
-    dispatch(setAlert(edit ? "Profile Updated" : "Profile Created"));
+    dispatch(setAlert(edit ? "Dialogue Updated" : "Dialogue Created"));
 
     
   } catch (err) {

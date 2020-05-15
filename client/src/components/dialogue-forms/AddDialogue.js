@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { createDialogue } from "../../actions/dialogue";
 import { langPairOptions } from "../common/options";
+import DialogPart from "./DaialogPart";
 
 class AddDialogue extends Component {
   constructor(props) {
@@ -45,14 +46,21 @@ class AddDialogue extends Component {
       note: this.state.note,
       parts: this.state.parts
     };
-    //this.props.addWord(wordData, this.props.history);
+    this.props.createDialogue(wordData, this.props.history);
     console.log(wordData);
   }
 
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
+  render() {
+    const { errors, parts } = this.state;
+    const onChangePart = (index, part) => {
+      const newParts = parts.filter(() => true);
+      //update part by index
+      newParts[index] = part;
 
+<<<<<<< HEAD
   handleChange(i, e) {
     const { name, value } = e.target;
     let parts = [...this.state.parts];
@@ -181,9 +189,30 @@ class AddDialogue extends Component {
     helpers.splice(i, 1);
     this.setState({ helpers });
   }
+=======
+      this.setState({parts: newParts});
+    };
+    const onAddPart = () => {
+      this.setState(prevState => ({
+        parts: [
+          ...prevState.parts,
+          {
+            sentence: "",
+            translation: "",
+            audio: "",
+            prompt: "",
+            helpers: [{ L1: "", L2: "" }]
+          }
+        ]
+      }));
+    };
+    const onRemovePart = (index) => {
+      //remove part by index
+      const newParts = parts.filter((value, cIndex) => cIndex !== index);
+      this.setState({parts: newParts});
+    };
+>>>>>>> split2components
 
-  render() {
-    const { errors } = this.state;
     return (
       <div className="add-word">
         <div className="container">
@@ -210,12 +239,12 @@ class AddDialogue extends Component {
                   onChange={this.onChange}
                   error={errors.note}
                 />
-                <div>{this.createUI()}</div>
+                <div>{parts.map((part, index) => <DialogPart part={part} onChange={onChangePart.bind(null, index)} onRemove={onRemovePart.bind(null, index)}/>)}</div>
                 <input
                   type="button"
                   value="add more"
                   className="btn btn-info btn-block mt-4"
-                  onClick={this.addClick.bind(this)}
+                  onClick={onAddPart}
                 />
                 <input
                   type="submit"
@@ -238,7 +267,7 @@ AddDialogue.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  dialogue: state.profile,
+  dialogue: state.dialogue,
   errors: state.errors
 });
 
