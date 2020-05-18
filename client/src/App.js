@@ -11,6 +11,7 @@ import Dashboard from "./components/dashboard/Dashboard";
 import CreateProfile from "./components/profile-forms/CreateProfile";
 import EditProfile from "./components/profile-forms/EditProfile";
 import AddDialogue from "./components/dialogue-forms/AddDialogue";
+import Dialogues from './components/layout/Dialogues'
 import PrivateRoute from "./components/routing/PrivateRoute";
 import { loadUser } from "./actions/auth";
 import setAuthToken from "./utils/setAuthToken";
@@ -50,6 +51,8 @@ const App = () => {
                 component={EditProfile}
               />
               <PrivateRoute exact path="/add-dialogue" component={AddDialogue} />
+              <Route exact path="/dialogues" component={Dialogues} />
+
             </Switch>
           </Container>
         </>

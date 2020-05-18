@@ -43,4 +43,20 @@ router.post(
   }
 );
 
+
+// @route     GET api/dialogues
+// @desc      GET all dialogues
+// @access    Public
+
+router.get("/", auth, async (req, res) => {
+  try {
+    const dialogues = await Dialogue.find().sort({ date: -1 });
+    res.json(dialogues);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+});
+
+
 module.exports = router;

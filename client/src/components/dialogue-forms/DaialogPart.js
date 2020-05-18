@@ -79,7 +79,7 @@ export default (props) => {
       <input
         type="button"
         value="remove"
-        className="btn btn-info btn-block mt-4"
+        className="button is-primary"
         onClick={onRemove}
       />
       <div>

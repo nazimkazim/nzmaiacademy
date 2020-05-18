@@ -1,6 +1,6 @@
 import axios from "axios";
 import { setAlert } from "./alert";
-import { CREATE_DIALOGUE, DIALOGUE_ERROR } from "./types";
+import { CREATE_DIALOGUE, DIALOGUE_ERROR, GET_ALL_DIALOGUES } from "./types";
 
 // create or update dialogue
 export const createDialogue = (
@@ -14,7 +14,6 @@ export const createDialogue = (
         "Content-Type": "application/json"
       }
     };
-
     const res = await axios.post("/api/dialogues", formData, config);
     dispatch({
       type: CREATE_DIALOGUE,
@@ -22,7 +21,6 @@ export const createDialogue = (
     });
     dispatch(setAlert(edit ? "Dialogue Updated" : "Dialogue Created"));
 
-    
   } catch (err) {
     const errors = err.response.data.errors;
     if (errors) {
@@ -34,3 +32,18 @@ export const createDialogue = (
     });
   }
 };
+
+export const getAllDialogues = () => async dispatch => {
+  try {
+    const res = await axios.get("/api/dialogues")
+    dispatch({
+      type:GET_ALL_DIALOGUES,
+      payload:res.data
+    })
+  } catch (err) {
+    dispatch({
+      type:DIALOGUE_ERROR,
+      payload:{ msg: err.response.statusText, status: err.response.status }
+    })
+  }
+}

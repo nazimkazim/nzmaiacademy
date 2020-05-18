@@ -37,13 +37,13 @@ export default (props) => {
       <input
         type="button"
         value="remove"
-        className="btn btn-info btn-block mt-4"
+        className="button is-primary"
         onClick={onRemove}
       />
       <input
         type="button"
         value="add more"
-        className="btn btn-info btn-block mt-4"
+        className="button is-primary"
         onClick={onAddMore}
       />
       <hr />

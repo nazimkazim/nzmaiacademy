@@ -45,7 +45,7 @@ router.post(
 
 // @route     GET api/posts
 // @desc      GET all posts
-// @access    Private
+// @access    Public
 
 router.get("/", auth, async (req, res) => {
   try {
