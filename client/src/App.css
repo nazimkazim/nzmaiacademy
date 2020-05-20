@@ -3,3 +3,23 @@
   border-radius: 0px;
   margin: 0px;
 }
+
+.margin-bottom {
+  margin-bottom: 20px;
+}
+
+.margin-top {
+  margin-top: 20px;
+}
+
+.speaker1 {
+  background-color: red;
+  padding:20px;
+  margin-bottom: 20px;
+}
+
+.speaker2 {
+  background-color: blue;
+  padding:20px;
+  margin-bottom: 20px;
+}

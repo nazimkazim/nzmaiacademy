@@ -1,6 +1,8 @@
 import React from 'react';
 import TextFieldGroup from '../common/TextFieldGroup';
 import DialogHelper from './DialogHelper';
+import SelectListGroup from "../common/SelectListGroup";
+import { speakersOptions } from "../common/options";
 
 
 export default (props) => {
@@ -12,6 +14,7 @@ export default (props) => {
     translation = '',
     audio = '',
     prompt = '',
+    speaker = ''
   } = part;
 
   const onRemoveHelper = (index) => {
@@ -47,7 +50,15 @@ export default (props) => {
   };
 
   return (
-    <div>
+    <div className={speaker === 'Speaker 1' ? 'speaker1' : 'speaker2'}>
+      <SelectListGroup
+        placeholder="Speaker 1"
+        info="type a speaker"
+        options={speakersOptions}
+        name="speaker"
+        value={speaker}
+        onChange={onChangeProperty.bind(null, "speaker")}
+      />
       <TextFieldGroup
         placeholder="I want some cheese"
         info="type example sentence"
@@ -76,12 +87,14 @@ export default (props) => {
         value={prompt}
         onChange={onChangeProperty.bind(null, "prompt")}
       />
+      
       <input
         type="button"
         value="remove"
-        className="button is-primary"
+        className="ui button"
         onClick={onRemove}
       />
+      <div className="margin-bottom"/>
       <div>
         {helpers.map((value, index) => <DialogHelper key={index}
                                                    helper={helpers[index]}

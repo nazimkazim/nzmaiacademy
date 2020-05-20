@@ -31,6 +31,7 @@ router.post(
         note: req.body.note,
         name: user.name,
         parts: req.body.parts,
+        description:req.body.description,
         user: user.id
       });
 

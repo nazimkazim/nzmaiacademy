@@ -10,6 +10,10 @@ const DialogueSchema = new Schema({
     type: String,
     required: true
   },
+  decription: {
+    type: String,
+    required: true
+  },
   parts: [
     {
       sentence: {
@@ -27,6 +31,10 @@ const DialogueSchema = new Schema({
       prompt: {
         type: String,
         required: true
+      },
+      speaker:{
+        type:String,
+        required:true
       },
       helpers: [
         {

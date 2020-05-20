@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import TextFieldGroup from "../common/TextFieldGroup";
 import SelectListGroup from "../common/SelectListGroup";
+import { Container, Grid, Input, Form, Label, Select } from 'semantic-ui-react';
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { createDialogue } from "../../actions/dialogue";
@@ -10,7 +11,7 @@ import { langPairOptions } from "../common/options";
 import DialogPart from "./DaialogPart";
 
 class AddDialogue extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       langPair: "",
@@ -21,6 +22,7 @@ class AddDialogue extends Component {
           translation: "",
           audio: "",
           prompt: "",
+          description: "",
           helpers: [{ L1: "", L2: "" }]
         }
       ],
@@ -60,7 +62,7 @@ class AddDialogue extends Component {
       //update part by index
       newParts[index] = part;
 
-      this.setState({parts: newParts});
+      this.setState({ parts: newParts });
     };
     const onAddPart = () => {
       this.setState(prevState => ({
@@ -79,49 +81,61 @@ class AddDialogue extends Component {
     const onRemovePart = (index) => {
       //remove part by index
       const newParts = parts.filter((value, cIndex) => cIndex !== index);
-      this.setState({parts: newParts});
+      this.setState({ parts: newParts });
     };
 
     return (
-        <div className="container">
-          <div className="columns">
-            <div className="column is-three-fifths
-is-offset-one-fifth">
-              <Link to="/dashboard" className="button is-primary">
-                Go Back
-              </Link>
-              <h1 className="has-text-centered">Add Dialogue</h1>
-              <form onSubmit={this.onSubmit}>
-                <SelectListGroup
-                  placeholder="English-Russian"
+      <Container>
+        <Grid centered columns={ 2 }>
+          <Grid.Column>
+            <div className="margin-top"/>
+            <Link to="/dashboard" className="ui button">
+              Go Back
+            </Link>
+            <h1 className="has-text-centered">Add Dialogue</h1>
+            <Form onSubmit={ this.onSubmit }>
+              <Form.Field>
+                <SelectListGroup 
+                  placeholder="English"
                   name="langPair"
-                  value={this.state.langPair}
-                  onChange={this.onChange}
-                  error={errors.langPair}
-                  options={langPairOptions}
-                />
-                <TextFieldGroup
-                  placeholder="Present perfect is used...."
-                  info="explain some concepts"
+                  value={ this.state.langPair }
+                  onChange={ this.onChange }
+                  options={ langPairOptions } />
+                  { errors.langPair &&
+                  <Label pointing>{errors.langPair}</Label> }
+              </Form.Field>
+              <Form.Field>
+                <Input
+                  error placeholder='Present perfect is used....'
                   name="note"
-                  value={this.state.note}
-                  onChange={this.onChange}
-                  error={errors.note}
-                />
-                <div>{parts.map((part, index) => <DialogPart part={part} onChange={onChangePart.bind(null, index)} onRemove={onRemovePart.bind(null, index)}/>)}</div>
-                <button
-                  type="button"
-                  className="button is-primary"
-                  onClick={onAddPart}
-                >add more</button>
-                <button
-                  type="submit"
-                  className="button is-primary"
-                >Submit</button>
-              </form>
-            </div>
-          </div>
-        </div>
+                  value={ this.state.note }
+                  onChange={ this.onChange }
+                  error={ errors.note } />
+                { errors.note &&
+                  <Label pointing>Please enter a value</Label> }
+              </Form.Field>
+              <TextFieldGroup
+                placeholder="This dialogue is intended to practice..."
+                info="Describe a dialogue"
+                name="description"
+                value={ this.state.description }
+                onChange={ this.onChange }
+                error={ errors.description }
+              />
+              <div>{ parts.map((part, index) => <DialogPart part={ part } onChange={ onChangePart.bind(null, index) } onRemove={ onRemovePart.bind(null, index) } />) }</div>
+              <button
+                type="button"
+                className="ui button"
+                onClick={ onAddPart }
+              >add more</button>
+              <button
+                type="submit"
+                className="ui button"
+              >Submit</button>
+            </Form>
+          </Grid.Column>
+        </Grid>
+      </Container>
     );
   }
 }
