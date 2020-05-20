@@ -91,7 +91,7 @@ export default (props) => {
       <input
         type="button"
         value="remove"
-        className="ui button"
+        className="ui button primary"
         onClick={onRemove}
       />
       <div className="margin-bottom"/>

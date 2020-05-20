@@ -16,13 +16,13 @@ class AddDialogue extends Component {
     this.state = {
       langPair: "",
       note: "",
+      description: "",
       parts: [
         {
           sentence: "",
           translation: "",
           audio: "",
           prompt: "",
-          description: "",
           helpers: [{ L1: "", L2: "" }]
         }
       ],
@@ -46,6 +46,7 @@ class AddDialogue extends Component {
     const wordData = {
       langPair: this.state.langPair,
       note: this.state.note,
+      description:this.state.description,
       parts: this.state.parts
     };
     this.props.createDialogue(wordData, this.props.history);
@@ -89,7 +90,7 @@ class AddDialogue extends Component {
         <Grid centered columns={ 2 }>
           <Grid.Column>
             <div className="margin-top"/>
-            <Link to="/dashboard" className="ui button">
+            <Link to="/dashboard" className="ui button primary ">
               Go Back
             </Link>
             <h1 className="has-text-centered">Add Dialogue</h1>
@@ -106,7 +107,8 @@ class AddDialogue extends Component {
               </Form.Field>
               <Form.Field>
                 <Input
-                  error placeholder='Present perfect is used....'
+                  error 
+                  placeholder='Present perfect is used....'
                   name="note"
                   value={ this.state.note }
                   onChange={ this.onChange }
@@ -114,23 +116,27 @@ class AddDialogue extends Component {
                 { errors.note &&
                   <Label pointing>Please enter a value</Label> }
               </Form.Field>
-              <TextFieldGroup
-                placeholder="This dialogue is intended to practice..."
-                info="Describe a dialogue"
-                name="description"
-                value={ this.state.description }
-                onChange={ this.onChange }
-                error={ errors.description }
-              />
+              <Form.Field>
+                <Input
+                  error 
+                  placeholder="This dialogue is intended to practice..."
+                  name="description"
+                  value={ this.state.description }
+                  onChange={ this.onChange }
+                  error={ errors.description } 
+                />
+                { errors.description &&
+                  <Label pointing>Please enter a value</Label> }
+              </Form.Field>
               <div>{ parts.map((part, index) => <DialogPart part={ part } onChange={ onChangePart.bind(null, index) } onRemove={ onRemovePart.bind(null, index) } />) }</div>
               <button
                 type="button"
-                className="ui button"
+                className="ui button primary" 
                 onClick={ onAddPart }
               >add more</button>
               <button
                 type="submit"
-                className="ui button"
+                className="ui button primary"
               >Submit</button>
             </Form>
           </Grid.Column>

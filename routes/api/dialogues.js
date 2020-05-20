@@ -30,8 +30,8 @@ router.post(
         langPair: req.body.langPair,
         note: req.body.note,
         name: user.name,
-        parts: req.body.parts,
         description:req.body.description,
+        parts: req.body.parts,
         user: user.id
       });
 
