@@ -1,6 +1,6 @@
 import axios from "axios";
 import { setAlert } from "./alert";
-import { CREATE_DIALOGUE, DIALOGUE_ERROR, GET_ALL_DIALOGUES } from "./types";
+import { CREATE_DIALOGUE, DIALOGUE_ERROR, GET_ALL_DIALOGUES,GET_DIALOGUES_BY_USER } from "./types";
 
 // create or update dialogue
 export const createDialogue = (
@@ -33,17 +33,36 @@ export const createDialogue = (
   }
 };
 
+export const getDialoguesByUser = user => async dispatch => {
+  try {
+    const res = await axios.get('/api/dialogues');
+    let filteredDialogues = res.data.filter(dialogue => dialogue.user === user._id);
+    dispatch({
+      type: GET_DIALOGUES_BY_USER,
+      payload: filteredDialogues
+    });
+  } catch (error) {
+    dispatch({
+      type: DIALOGUE_ERROR,
+      payload: null
+    });
+  }
+};
+
+
+
+
 export const getAllDialogues = () => async dispatch => {
   try {
-    const res = await axios.get("/api/dialogues")
+    const res = await axios.get("/api/dialogues");
     dispatch({
-      type:GET_ALL_DIALOGUES,
-      payload:res.data
-    })
+      type: GET_ALL_DIALOGUES,
+      payload: res.data
+    });
   } catch (err) {
     dispatch({
-      type:DIALOGUE_ERROR,
-      payload:{ msg: err.response.statusText, status: err.response.status }
-    })
+      type: DIALOGUE_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
   }
-}
+};

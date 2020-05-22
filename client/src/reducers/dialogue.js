@@ -1,4 +1,4 @@
-import { CREATE_DIALOGUE, GET_ALL_DIALOGUES, DIALOGUE_ERROR } from "../actions/types";
+import { CREATE_DIALOGUE, GET_ALL_DIALOGUES, DIALOGUE_ERROR, GET_DIALOGUES_BY_USER } from "../actions/types";
 
 const initialState = {
   dialogue: null,
@@ -28,6 +28,12 @@ export default function (state = initialState, action) {
         dialogues: payload,
         loading: false
       };
+    case GET_DIALOGUES_BY_USER:
+      return {
+        ...state,
+        dialogues:payload,
+        loading:false
+      }
     default:
       return state;
   }
