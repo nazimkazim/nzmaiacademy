@@ -1,6 +1,6 @@
 import axios from "axios";
 import { setAlert } from "./alert";
-import { CREATE_DIALOGUE, DIALOGUE_ERROR, GET_ALL_DIALOGUES,GET_DIALOGUES_BY_USER } from "./types";
+import { CREATE_DIALOGUE, DIALOGUE_ERROR, GET_ALL_DIALOGUES,GET_DIALOGUES_BY_USER, GET_DIALOGUE_BY_ID } from "./types";
 
 // create or update dialogue
 export const createDialogue = (
@@ -49,14 +49,26 @@ export const getDialoguesByUser = user => async dispatch => {
   }
 };
 
-
-
-
 export const getAllDialogues = () => async dispatch => {
   try {
     const res = await axios.get("/api/dialogues");
     dispatch({
       type: GET_ALL_DIALOGUES,
+      payload: res.data
+    });
+  } catch (err) {
+    dispatch({
+      type: DIALOGUE_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+
+export const getDialogueById = (id) => async dispatch => {
+  try {
+    const res = await axios.get(`/api/dialogues/${id}`);
+    dispatch({
+      type: GET_DIALOGUE_BY_ID,
       payload: res.data
     });
   } catch (err) {

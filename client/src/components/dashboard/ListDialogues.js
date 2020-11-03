@@ -1,19 +1,20 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Spinner from '../layout/Spinner';
 import { getDialoguesByUser } from '../../actions/dialogue';
-import { Grid, Card, Button } from 'semantic-ui-react';
+import { Card, Button } from 'semantic-ui-react';
 
 
 function ListDialogues({ getDialoguesByUser, dialogue: { dialogues, loading }, auth: { user } }) {
   useEffect(() => {
     getDialoguesByUser(user);
   }, [getDialoguesByUser]);
-  console.log(user);
-  console.log(dialogues);
+  //console.log(user);
+  //console.log(dialogues);
   return (
-    <div>
+    <>
       <h1>My dialogues</h1>
       { loading ? <Spinner /> : (
         dialogues.map(dialogue => (
@@ -24,12 +25,12 @@ function ListDialogues({ getDialoguesByUser, dialogue: { dialogues, loading }, a
               <Card.Description>
                 { dialogue.description }
               </Card.Description>
-              <Button primary>View</Button>
+              <Link to={ `/dialogues/${dialogue._id}` }><Button primary>View</Button></Link>
             </Card.Content>
           </Card>
         ))
       ) }
-    </div>
+    </>
   );
 }
 

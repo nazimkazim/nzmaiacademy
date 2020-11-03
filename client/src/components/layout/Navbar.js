@@ -24,6 +24,9 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
       <Link to="/dashboard">
         <Menu.Item name="dashboard" active={activeItem === "dashboard"} />
       </Link>
+      <Link to="/dialogues">
+        <Menu.Item name="dialogues" active={activeItem === "dialogues"} />
+      </Link>
     </>
   );
 

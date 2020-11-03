@@ -1,4 +1,5 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import {Link} from 'react-router-dom'
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Spinner from '../layout/Spinner';
@@ -7,7 +8,7 @@ import { Grid, Card, Button } from 'semantic-ui-react';
 
 
 const Dialogues = ({ getAllDialogues, dialogue: { dialogues, loading } }) => {
-  
+
   useEffect(() => {
     getAllDialogues();
   }, [getAllDialogues]);
@@ -21,12 +22,12 @@ const Dialogues = ({ getAllDialogues, dialogue: { dialogues, loading } }) => {
             dialogues.map(dialogue => (
               <Card>
                 <Card.Content>
-            <Card.Header>{dialogue.langPair}</Card.Header>
-            <Card.Meta>{dialogue.name}</Card.Meta>
+                  <Card.Header>{ dialogue.langPair }</Card.Header>
+                  <Card.Meta>{ dialogue.name }</Card.Meta>
                   <Card.Description>
-                    {dialogue.description}
-        </Card.Description>
-                <Button primary>View</Button>
+                    { dialogue.description }
+                  </Card.Description>
+                  <Link to={`/dialogues/${dialogue._id}`}><Button primary>View</Button></Link>
                 </Card.Content>
               </Card>
             ))

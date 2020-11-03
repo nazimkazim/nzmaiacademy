@@ -43,7 +43,7 @@ const EditProfile = ({
   const [displaySocialInputs, toggleSocialInputs] = useState(false);
 
   useEffect(() => {
-    if (!profile) getCurrentProfile();
+    getCurrentProfile();
     if (!loading) {
       const profileData = { ...initialState };
       for (const key in profile) {
@@ -240,6 +240,6 @@ const mapStateToProps = state => ({
   profile: state.profile
 });
 
-export default connect(mapStateToProps, { createProfile })(
+export default connect(mapStateToProps, { createProfile,getCurrentProfile })(
   withRouter(EditProfile)
 );

@@ -59,5 +59,28 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
+// @route     GET api/dialogues/:id
+// @desc      GET a dialogue by id
+// @access    Public
+
+router.get("/:id", async (req, res) => {
+  try {
+    const dialogue = await Dialogue.findById(req.params.id);
+    if (!dialogue) {
+      return res.status(404).json({ msg: "Dialogue not found" });
+    }
+    res.json(dialogue);
+  } catch (err) {
+    console.error(err.message);
+    if (err.kind === "ObjectId") {
+      return res.status(404).json({ msg: "Dialogue not found" });
+    }
+    res.status(500).send("Server error");
+  }
+});
+
+
+
+
 
 module.exports = router;

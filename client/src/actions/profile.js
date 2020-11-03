@@ -43,6 +43,7 @@ export const createProfile = (
     }
   } catch (err) {
     const errors = err.response.data.errors;
+    console.log(errors)
     if (errors) {
       errors.forEach(error => dispatch(setAlert(error.msg, "warning black")));
     }
