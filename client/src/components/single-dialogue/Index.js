@@ -8,6 +8,7 @@ import { speakStr } from '../helpers/Pronunciation';
 
 
 
+
 const Strip = styled.div`
   width:100%;
   height:auto;
@@ -16,6 +17,7 @@ const Strip = styled.div`
   background-color:#CFD8D2;
   margin-bottom:15px;
   cursor:pointer;
+  border:1px solid #161827;
 `;
 
 const ToggleButton = styled.button`
@@ -77,7 +79,7 @@ function Index({ getDialogueById, dialogueStateToProps: { dialogue, loading }, m
 
   //console.log(dialogue && dialogue.parts[0].speaker === 'Speaker 1');
   const speakSentence = (sentence) => {
-    !toggleTranslation ? speakStr(sentence, 'En-en') : speakStr(sentence, 'Ru-ru');
+    !toggleTranslation ? speakStr(sentence, 'en-En') : speakStr(sentence, 'ru-RU');
   };
 
 
@@ -98,8 +100,8 @@ function Index({ getDialogueById, dialogueStateToProps: { dialogue, loading }, m
           >
             { part.translation }
           </Sentence>}
-          
         </Strip>
+        
       )) }
     </Container>
   );
