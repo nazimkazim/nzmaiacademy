@@ -5,11 +5,13 @@ import Spinner from '../layout/Spinner';
 import { getDialogueById } from '../../actions/dialogue';
 import styled, { keyframes } from 'styled-components';
 import { speakStr } from '../helpers/Pronunciation';
+import ModalComp from '../Modal'
 
 
 
 
 const Strip = styled.div`
+  position:relative;
   width:100%;
   height:auto;
   padding:25px;
@@ -34,7 +36,19 @@ const ToggleButton = styled.button`
   border:none;
   border-radius:6px;
   outline:none;
-`
+`;
+
+const Info = styled.button`
+  top:3px;
+  left:3px;
+  position:absolute;
+  width:20px;
+  height:20px;
+  border-radius:50%;
+  background-color:blue;
+  cursor:pointer;
+  outline:none;
+`;
 
 const Container = styled.div`
   display:flex;
@@ -46,8 +60,6 @@ const Container = styled.div`
   background-color:##F2F7FD;
   /* border:1px solid #D5B942; */
 `;
-
-
 
 const underlineAnimation = keyframes`
   from {
@@ -70,6 +82,7 @@ const Sentence = styled.p`
 
 function Index({ getDialogueById, dialogueStateToProps: { dialogue, loading }, match }) {
   const [toggleTranslation, setToggleTranslation] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
     const id = match.params.id;
@@ -82,13 +95,16 @@ function Index({ getDialogueById, dialogueStateToProps: { dialogue, loading }, m
     !toggleTranslation ? speakStr(sentence, 'en-En') : speakStr(sentence, 'ru-RU');
   };
 
+  console.log(openModal);
+
 
   return loading || dialogue === null ? <Spinner /> : (
     <Container>
+      <ModalComp openModal={openModal} setOpenModal={setOpenModal}/>
       <ToggleButton onClick={ () => setToggleTranslation(!toggleTranslation) } color='blue'>{ !toggleTranslation ? 'show translation' : 'hide translation' }</ToggleButton>
-
       {dialogue.parts.map((part) => (
         <Strip key={ part._id }>
+          <Info onClick={ () => { setOpenModal(true); } }></Info>
           {!toggleTranslation ? <Sentence
             speaker={ part.speaker }
             onClick={ () => speakSentence(part.sentence) }
@@ -98,10 +114,10 @@ function Index({ getDialogueById, dialogueStateToProps: { dialogue, loading }, m
             speaker={ part.speaker }
             onClick={ () => speakSentence(part.translation) }
           >
-            { part.translation }
-          </Sentence>}
+              { part.translation }
+            </Sentence> }
         </Strip>
-        
+
       )) }
     </Container>
   );
