@@ -83,6 +83,7 @@ const Sentence = styled.p`
 function Index({ getDialogueById, dialogueStateToProps: { dialogue, loading }, match }) {
   const [toggleTranslation, setToggleTranslation] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [stripId, setStripId] = useState('')
 
   useEffect(() => {
     const id = match.params.id;
@@ -95,16 +96,22 @@ function Index({ getDialogueById, dialogueStateToProps: { dialogue, loading }, m
     !toggleTranslation ? speakStr(sentence, 'en-En') : speakStr(sentence, 'ru-RU');
   };
 
-  console.log(openModal);
+  //console.log(openModal);
+  //console.log(stripId)
 
 
   return loading || dialogue === null ? <Spinner /> : (
     <Container>
-      <ModalComp openModal={openModal} setOpenModal={setOpenModal}/>
+      <ModalComp openModal={openModal} id={stripId} setOpenModal={setOpenModal} data = {dialogue.parts} />
       <ToggleButton onClick={ () => setToggleTranslation(!toggleTranslation) } color='blue'>{ !toggleTranslation ? 'show translation' : 'hide translation' }</ToggleButton>
       {dialogue.parts.map((part) => (
-        <Strip key={ part._id }>
-          <Info onClick={ () => { setOpenModal(true); } }></Info>
+        <Strip 
+          key={ part._id } 
+        >
+          <Info onClick={ () => { 
+            setOpenModal(true); 
+            setStripId(part._id)
+            } }></Info>
           {!toggleTranslation ? <Sentence
             speaker={ part.speaker }
             onClick={ () => speakSentence(part.sentence) }
