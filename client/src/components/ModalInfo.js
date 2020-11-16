@@ -1,25 +1,25 @@
 import React from 'react';
-import { Button, Icon, Modal } from 'semantic-ui-react';
+import { Modal } from 'semantic-ui-react';
 
-function ModalComp({ openModal, setOpenModal, data, id }) {
+function ModalComp({ openInfoModal, setOpenInfoModal, data, id }) {
   //console.log(prompt)
   //console.log(id)
   const filterPrompts = () => {
     let strip = data.filter((strip) => {
       return strip._id === id;
     });
-    console.log(strip[0]);
+    //console.log(strip[0]);
     return strip[0];
   };
 
   return (
     <>
       <Modal
-        onClose={ () => setOpenModal(!openModal) }
-        onOpen={ () => setOpenModal(openModal) }
-        open={ openModal }
+        onClose={ () => setOpenInfoModal(!openInfoModal) }
+        onOpen={ () => setOpenInfoModal(openInfoModal) }
+        open={ openInfoModal }
       >
-        <Modal.Header>Useful tips</Modal.Header>
+        <Modal.Header color='red'>Useful tips</Modal.Header>
         <Modal.Content>
           <Modal.Description>
           <p>{filterPrompts() && filterPrompts().prompt}</p>

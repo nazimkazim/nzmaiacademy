@@ -5,7 +5,8 @@ import Spinner from '../layout/Spinner';
 import { getDialogueById } from '../../actions/dialogue';
 import styled, { keyframes } from 'styled-components';
 import { speakStr } from '../helpers/Pronunciation';
-import ModalComp from '../Modal'
+import ModalInfo from '../ModalInfo'
+import ModalWords from '../ModalWords'
 
 
 
@@ -45,9 +46,29 @@ const Info = styled.button`
   width:20px;
   height:20px;
   border-radius:50%;
-  background-color:blue;
+  background:url('https://res.cloudinary.com/nzmai/image/upload/v1605069167/icons/info.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 20px;
   cursor:pointer;
   outline:none;
+  border:none;
+`;
+
+const Helper = styled.button`
+  top:3px;
+  left:26px;
+  position:absolute;
+  width:20px;
+  height:20px;
+  border-radius:50%;
+  background:url('https://res.cloudinary.com/nzmai/image/upload/v1605537823/icons/language.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 20px;
+  cursor:pointer;
+  outline:none;
+  border:none;
 `;
 
 const Container = styled.div`
@@ -82,7 +103,8 @@ const Sentence = styled.p`
 
 function Index({ getDialogueById, dialogueStateToProps: { dialogue, loading }, match }) {
   const [toggleTranslation, setToggleTranslation] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
+  const [openInfoModal, setOpenInfoModal] = useState(false);
+  const [openHelperModal, setOpenHelperModal] = useState(false);
   const [stripId, setStripId] = useState('')
 
   useEffect(() => {
@@ -102,16 +124,21 @@ function Index({ getDialogueById, dialogueStateToProps: { dialogue, loading }, m
 
   return loading || dialogue === null ? <Spinner /> : (
     <Container>
-      <ModalComp openModal={openModal} id={stripId} setOpenModal={setOpenModal} data = {dialogue.parts} />
+      <ModalInfo openInfoModal={openInfoModal} id={stripId} setOpenInfoModal={setOpenInfoModal} data = {dialogue.parts} />
+      <ModalWords openHelperModal={openHelperModal} id={stripId} setOpenHelperModal={setOpenHelperModal} data = {dialogue.parts} />
       <ToggleButton onClick={ () => setToggleTranslation(!toggleTranslation) } color='blue'>{ !toggleTranslation ? 'show translation' : 'hide translation' }</ToggleButton>
       {dialogue.parts.map((part) => (
         <Strip 
           key={ part._id } 
         >
           <Info onClick={ () => { 
-            setOpenModal(true); 
+            setOpenInfoModal(true); 
             setStripId(part._id)
             } }></Info>
+          <Helper onClick={ () => { 
+            setOpenHelperModal(true); 
+            setStripId(part._id)
+            } }></Helper>
           {!toggleTranslation ? <Sentence
             speaker={ part.speaker }
             onClick={ () => speakSentence(part.sentence) }
