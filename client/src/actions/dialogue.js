@@ -22,7 +22,8 @@ export const createDialogue = (
     dispatch(setAlert(edit ? "Dialogue Updated" : "Dialogue Created"));
 
   } catch (err) {
-    const errors = err.response.data.errors;
+    console.log(err)
+    const errors = err.response.data && err.response.data.errors;
     if (errors) {
       errors.forEach(error => dispatch(setAlert(error.msg, "warning black")));
     }

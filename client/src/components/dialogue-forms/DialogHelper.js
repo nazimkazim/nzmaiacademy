@@ -33,7 +33,6 @@ export default (props) => {
         value={L2}
         onChange={onChangeProperty.bind(null, "L2")}
       />
-
       <input
         type="button"
         value="remove"

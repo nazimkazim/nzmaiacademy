@@ -25,6 +25,7 @@ router.post(
     }
 
     try {
+      console.log(req.parts);
       const user = await User.findById(req.user.id).select("-password");
       const newDialogue = new Dialogue({
         langPair: req.body.langPair,
@@ -34,6 +35,9 @@ router.post(
         parts: req.body.parts,
         user: user.id
       });
+      newDialogue.parts.map(item => {
+        console.log(item.audio);
+      })
 
       const dialogue = await newDialogue.save();
       res.json(dialogue);
