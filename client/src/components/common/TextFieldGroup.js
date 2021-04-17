@@ -15,20 +15,20 @@ const TextFieldGroup = ({
   return (
     <div className="field">
       <div class="control">
-      <input
-        type={type}
-        placeholder={placeholder}
-        className={classnames('input is-primary', {
-          'is-invalid': error
-        })}
-        name={name}
-        value={value}
-        onChange={onChange}
-        disabled={disabled}
-      />
+        <input
+          type={ type }
+          placeholder={ placeholder }
+          className={ classnames('input is-primary', {
+            'is-invalid': error
+          }) }
+          name={ name }
+          value={ value }
+          onChange={ onChange }
+          disabled={ disabled }
+        />
       </div>
-      {info && <small className="form-text text-muted">{info}</small>}
-      {error && <div className="invalid-feedback">{error}</div>}
+      {info && <small className="form-text text-muted">{ info }</small> }
+      {error && <div className="invalid-feedback">{ error }</div> }
     </div>
   );
 };

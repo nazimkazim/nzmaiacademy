@@ -9,6 +9,8 @@ import { langPairOptions } from "../common/options";
 import DialogPart from "./DaialogPart";
 import { TextField, FormControl, InputLabel, FormHelperText, Select } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { useFormik } from "formik";
+import { replaceArrayValue } from "./utilities";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,6 +26,26 @@ const useStyles = makeStyles((theme) => ({
 
 function AddDialogue(props) {
   const classes = useStyles();
+
+  const { values, handleChange, handleBlur, handleSubmit, setFieldValue } = useFormik({
+    initialValues: {
+      langPair: "",
+      note: "",
+      description: "",
+      parts: [
+        {
+          sentence: "",
+          translation: "",
+          audio: "",
+          prompt: "",
+          helpers: [{ L1: "", L2: "" }]
+        }
+      ]
+    },
+    onSubmit: (values) =>
+      props.createDialogue(values, props.history)
+  });
+
   const [dialog, setDialog] = useState({
     langPair: "",
     note: "",
@@ -64,24 +86,33 @@ function AddDialogue(props) {
       return { ...prevState, parts: newParts };
     });
   };
-  const onAddPart = () => {
-    setDialog(prevState => ({
-      ...prevState,
-      parts: [
-        ...prevState.parts,
-        {
-          sentence: "",
-          translation: "",
-          audio: "",
-          prompt: "",
-          helpers: [{ L1: "", L2: "" }]
-        }
-      ]
-    }));
+
+  const handlePartChange = (index) => (event) => {
+    const { value, name } = event.target;
+    const updatedPart = {
+      ...values[index],
+      [name]: value,
+    };
+    setFieldValue(`parts[${index}]`, updatedPart);
   };
-  const onRemovePart = (index) => {
-    //remove part by index
-    setDialog((prevValues) => ({ ...prevValues, parts: prevValues.parts.filter((value, cIndex) => cIndex !== index) }));
+
+  const handlePartHelpersChange = (index) => (updatedHelpers) => {
+    setFieldValue(`parts[${index}].helpers`, updatedHelpers);
+  };
+
+  const onAddPart = () => {
+    const newPart = {
+      sentence: "",
+      translation: "",
+      audio: "",
+      prompt: "",
+      helpers: [{ L1: "", L2: "" }]
+    };
+    setFieldValue("parts", [...values.parts, newPart]);
+  };
+
+  const onRemovePart = (removedPartIndex) => {
+    setFieldValue("parts", values.parts.filter((part, index) => index !== removedPartIndex));
   };
 
   return (
@@ -131,30 +162,30 @@ function AddDialogue(props) {
               className="ui button primary"
             >Submit</button>
           </Form> */}
-          <form className={ classes.root } noValidate autoComplete="off">
+          <form className={ classes.root } noValidate autoComplete="off" onSubmit={ handleSubmit }>
             <InputLabel htmlFor="language-pair">Language pair</InputLabel>
             <Select
               native
-              value={ dialog.langPair }
-              onChange={ onChange }
-              inputProps={ {
-                name: 'age',
-                id: 'language-pair',
-              } }
+              name="langPair"
+              value={ values.langPair }
+              onChange={ handleChange }
+              onBlur={ handleBlur }
             >
               <option aria-label="None" value="" />
               { langPairOptions.map(item => {
-                console.log(item.id);
                 return (
                   <option key={ item.id } value={ item.value }>{ item.value }</option>
                 );
               }) }
             </Select>
+
             <InputLabel htmlFor="note">Note</InputLabel>
-            <TextField id="note" label="Present perfect is used to indicate that..." />
+            <TextField id="note" label="Present perfect is used to indicate that..." name="note" value={ values.note } onChange={ handleChange } onBlur={ handleBlur } />
+
             <InputLabel htmlFor="description">Description</InputLabel>
-            <TextField id="description" label="In this dialog you will learn..." />
-            <div>{ dialog.parts.map((part, index) => <DialogPart part={ part } onChange={ () => onChangePart(null, index) } onRemove={ onRemovePart.bind(null, index) } />) }</div>
+            <TextField id="description" label="In this dialog you will learn..." name="description" value={ values.description } onChange={ handleChange } />
+
+            <div>{ values.parts.map((part, index) => <DialogPart part={ part } onChange={ handlePartChange(index) } onRemove={ onRemovePart.bind(null, index) } handlePartHelpersChange={ handlePartHelpersChange } />) }</div>
             <button
               type="button"
               className="ui button primary"

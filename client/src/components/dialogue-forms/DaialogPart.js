@@ -3,10 +3,12 @@ import TextFieldGroup from '../common/TextFieldGroup';
 import DialogHelper from './DialogHelper';
 import SelectListGroup from "../common/SelectListGroup";
 import { speakersOptions } from "../common/options";
+import { NativeSelect, TextField } from '@material-ui/core';
+import { insertArrayValueAfterIndex } from './utilities';
 
 
-export default (props) => {
-  const { part = {}, onChange, onRemove } = props;
+const DialogPart = (props) => {
+  const { part = {}, onChange, onRemove, handlePartHelpersChange } = props;
 
   const {
     helpers = [],
@@ -18,49 +20,23 @@ export default (props) => {
   } = part;
 
   const onRemoveHelper = (index) => {
-    const newHelpers = helpers.filter((value, arrIndex) => index !== arrIndex);
-
-    const data = { ...part };
-    data.helpers = newHelpers;
-    onChange(data);
+    const updatedHelpers = helpers.filter((value, arrIndex) => index !== arrIndex);
+    handlePartHelpersChange(updatedHelpers);
   };
 
   const onAddMoreHelper = (index) => {
-    //add new empty item by position index to exists list
-    helpers.splice(index + 1, 0, {});
-    const data = { ...part };
-    //new empty item by index
-    data.helpers = [
-      ...helpers
-    ];
-    onChange(data);
-  };
-
-  const onChangeProperty = (propertyName, e) => {
-    console.log(propertyName);
-    //copy current helper
-    const data = { ...part };
-    //change value by property name
-    data[propertyName] = e.target.value;
-    if (propertyName === 'audio') {
-      const file = e.target.files[0];
-      console.log(file);
-      if (file) {
-        data[propertyName] = file;
-      }
-    }
-
-    onChange(data);
+    const updatedHelpers = insertArrayValueAfterIndex(helpers, index, {});
+    handlePartHelpersChange(updatedHelpers);
   };
 
   const onChangeHelper = (index, helper) => {
-    part.helpers[index] = helper;
-    onChange(part);
+    const updatedHelpers = replaceArrayValueByIndex(helpers, index, helper);
+    handlePartHelpersChange(updatedHelpers);
   };
 
   return (
     <div className={ speaker === 'Speaker 1' ? 'speaker1' : 'speaker2' }>
-      <SelectListGroup
+      {/* <SelectListGroup
         placeholder="Speaker 1"
         info="type a speaker"
         options={ speakersOptions }
@@ -102,11 +78,48 @@ export default (props) => {
         value="remove"
         className="ui button primary"
         onClick={ onRemove }
+      /> */}
+      <NativeSelect
+        value={ speaker }
+        onChange={ onChange }
+        name="speaker"
+        inputProps={ { 'aria-label': 'age' } }
+      >
+        { speakersOptions.map(item => (
+          <option value={ item.value }>{ item.value }</option>
+        )) }
+      </NativeSelect>
+
+      <TextField
+        name="sentence"
+        value={ sentence }
+        onChange={ onChange }
       />
+
+      <TextField
+        name="translation"
+        value={ translation }
+        onChange={ onChange }
+      />
+
+      <TextField
+        type="file"
+        name="audio"
+        placeholder="Audio"
+        value={ audio }
+        onChange={ onChange }
+      />
+
+      <TextField
+        name="prompt"
+        value={ prompt }
+        onChange={ onChange }
+      />
+
       <div className="margin-bottom" />
       <div>
         { helpers.map((value, index) => <DialogHelper key={ index }
-          helper={ helpers[index] }
+          helper={ value }
           onChange={ onChangeHelper.bind(null, index) }
           onRemove={ onRemoveHelper.bind(null, index) }
           onAddMore={ onAddMoreHelper.bind(null, index) } />)
@@ -115,3 +128,5 @@ export default (props) => {
     </div>
   );
 };
+
+export default DialogPart;
