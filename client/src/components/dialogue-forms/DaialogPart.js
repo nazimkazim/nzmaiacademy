@@ -4,7 +4,7 @@ import DialogHelper from './DialogHelper';
 import SelectListGroup from "../common/SelectListGroup";
 import { speakersOptions } from "../common/options";
 import { NativeSelect, TextField } from '@material-ui/core';
-import { insertArrayValueAfterIndex } from './utilities';
+import { insertArrayValueAfterIndex, replaceArrayValueByIndex } from './utilities';
 
 
 const DialogPart = (props) => {
@@ -25,7 +25,10 @@ const DialogPart = (props) => {
   };
 
   const onAddMoreHelper = (index) => {
-    const updatedHelpers = insertArrayValueAfterIndex(helpers, index, {});
+    const updatedHelpers = insertArrayValueAfterIndex(helpers, index, {
+      L1: '',
+      L2: ''
+    });
     handlePartHelpersChange(updatedHelpers);
   };
 
@@ -103,7 +106,7 @@ const DialogPart = (props) => {
       />
 
       <TextField
-        type="file"
+        //type="file"
         name="audio"
         placeholder="Audio"
         value={ audio }

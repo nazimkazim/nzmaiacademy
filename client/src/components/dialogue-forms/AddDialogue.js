@@ -1,16 +1,15 @@
-/* eslint-disable react/no-direct-mutation-state */
 import React, { useState } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { Container, Grid } from 'semantic-ui-react';
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { createDialogue } from "../../actions/dialogue";
-import { langPairOptions } from "../common/options";
-import DialogPart from "./DaialogPart";
 import { TextField, FormControl, InputLabel, FormHelperText, Select } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useFormik } from "formik";
-import { replaceArrayValue } from "./utilities";
+
+import { createDialogue } from "../../actions/dialogue";
+import { langPairOptions } from "../common/options";
+import DialogPart from "./DaialogPart";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -43,7 +42,7 @@ function AddDialogue(props) {
       ]
     },
     onSubmit: (values) =>
-      props.createDialogue(values, props.history)
+      props.createDialogue(dialog, props.history)
   });
 
   const [dialog, setDialog] = useState({
@@ -54,6 +53,7 @@ function AddDialogue(props) {
       {
         sentence: "",
         translation: "",
+        speaker: "",
         audio: "",
         prompt: "",
         helpers: [{ L1: "", L2: "" }]
@@ -61,42 +61,16 @@ function AddDialogue(props) {
     ]
   });
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-    const wordData = {
-      langPair: dialog.langPair,
-      note: dialog.note,
-      description: dialog.description,
-      parts: dialog.parts
-    };
-    props.createDialogue(wordData, props.history);
-    //console.log(wordData);
-  };
-
-  const onChange = (e) => {
-    const { name, value } = e.target;
-    setDialog(prevValues => ({ ...prevValues, [name]: value }));
-  };
-
-  const onChangePart = (index, part) => {
-    setDialog(prevState => {
-      const newParts = prevState.parts.filter(() => true);
-      //update part by index
-      newParts[index] = part;
-      return { ...prevState, parts: newParts };
-    });
-  };
-
   const handlePartChange = (index) => (event) => {
     const { value, name } = event.target;
     const updatedPart = {
-      ...values[index],
+      ...values.parts[index],
       [name]: value,
     };
     setFieldValue(`parts[${index}]`, updatedPart);
   };
 
-  const handlePartHelpersChange = (index) => (updatedHelpers) => {
+  const setupPartHelpersChangeHandler = (index) => (updatedHelpers) => {
     setFieldValue(`parts[${index}].helpers`, updatedHelpers);
   };
 
@@ -185,7 +159,7 @@ function AddDialogue(props) {
             <InputLabel htmlFor="description">Description</InputLabel>
             <TextField id="description" label="In this dialog you will learn..." name="description" value={ values.description } onChange={ handleChange } />
 
-            <div>{ values.parts.map((part, index) => <DialogPart part={ part } onChange={ handlePartChange(index) } onRemove={ onRemovePart.bind(null, index) } handlePartHelpersChange={ handlePartHelpersChange } />) }</div>
+            <div>{ values.parts.map((part, index) => <DialogPart part={ part } onChange={ handlePartChange(index) } onRemove={ onRemovePart.bind(null, index) } handlePartHelpersChange={ setupPartHelpersChangeHandler(index) } />) }</div>
             <button
               type="button"
               className="ui button primary"

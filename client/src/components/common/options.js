@@ -6,7 +6,7 @@ export const langPairOptions = [
 ];
 
 export const speakersOptions = [
-  { label: "Choose a speaker", value: 0 },
+  { label: "Choose a speaker", value: "" },
   { label: "Speaker 1", value: "Speaker 1" },
   { label: "Speaker 2", value: "Speaker 2" }
 ];
