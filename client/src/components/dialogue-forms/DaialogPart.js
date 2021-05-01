@@ -1,15 +1,44 @@
 import React from 'react';
-import TextFieldGroup from '../common/TextFieldGroup';
 import DialogHelper from './DialogHelper';
-import SelectListGroup from "../common/SelectListGroup";
 import { speakersOptions } from "../common/options";
-import { NativeSelect, TextField } from '@material-ui/core';
+import { NativeSelect, TextField, InputLabel, Button } from '@material-ui/core';
 import { insertArrayValueAfterIndex, replaceArrayValueByIndex } from './utilities';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    '& > *': {
+      margin: theme.spacing(1),
+      width: '55ch',
+    }
+  },
+  speaker: {
+    display: 'flex',
+    flexDirection: 'column',
+    padding: 3
+  },
+  speaker1: {
+    backgroundColor: "#D3EDEE"
+  },
+  speaker2: {
+    backgroundColor: "#7BC9CC"
+  },
+  inputFieldClass: {
+    marginBottom: 40
+  },
+  customButton: {
+    marginBottom: 40
+  }
+}));
 
 
 const DialogPart = (props) => {
-  const { part = {}, onChange, onRemove, handlePartHelpersChange } = props;
+  const classes = useStyles();
 
+  const { part = {}, onChange, onRemove, handlePartHelpersChange } = props;
   const {
     helpers = [],
     sentence = '',
@@ -38,53 +67,13 @@ const DialogPart = (props) => {
   };
 
   return (
-    <div className={ speaker === 'Speaker 1' ? 'speaker1' : 'speaker2' }>
-      {/* <SelectListGroup
-        placeholder="Speaker 1"
-        info="type a speaker"
-        options={ speakersOptions }
-        name="speaker"
-        value={ speaker }
-        onChange={ onChangeProperty.bind(null, "speaker") }
-      />
-      <TextFieldGroup
-        placeholder="I want some cheese"
-        info="type example sentence"
-        name="sentence"
-        value={ sentence }
-        onChange={ onChangeProperty.bind(null, "sentence") }
-      />
-      <TextFieldGroup
-        placeholder="Я хочу сыра"
-        info="type translation of example sentence in Russian"
-        name="translation"
-        value={ translation }
-        onChange={ onChangeProperty.bind(null, "translation") }
-      />
-      <TextFieldGroup
-        placeholder="Audio"
-        info="add audio file"
-        name="audio"
-        type="file"
-        onChange={ onChangeProperty.bind(null, "audio") }
-      />
-      <TextFieldGroup
-        placeholder="Give some hints to people"
-        info="Give some hints to people"
-        name="prompt"
-        value={ prompt }
-        onChange={ onChangeProperty.bind(null, "prompt") }
-      />
-
-      <input
-        type="button"
-        value="remove"
-        className="ui button primary"
-        onClick={ onRemove }
-      /> */}
+    <div className={ speaker === 'Speaker 1' ? `${classes.speaker} ${classes.speaker1}` : `${classes.speaker} ${classes.speaker2}` }>
+      <Button variant="contained" className={ classes.customButton } onClick={ onRemove }>Remove</Button>
+      <InputLabel htmlFor="speaker">Speaker</InputLabel>
       <NativeSelect
         value={ speaker }
         onChange={ onChange }
+        className={ classes.inputFieldClass }
         name="speaker"
         inputProps={ { 'aria-label': 'age' } }
       >
@@ -92,30 +81,37 @@ const DialogPart = (props) => {
           <option value={ item.value }>{ item.value }</option>
         )) }
       </NativeSelect>
-
+      <InputLabel htmlFor="sentence">Sentence</InputLabel>
       <TextField
         name="sentence"
+        label="I want this apple"
+        className={ classes.inputFieldClass }
         value={ sentence }
         onChange={ onChange }
       />
-
+      <InputLabel htmlFor="translation">Translation</InputLabel>
       <TextField
         name="translation"
         value={ translation }
+        className={ classes.inputFieldClass }
+        label="Я хочу это яблоко"
         onChange={ onChange }
       />
-
+      <InputLabel htmlFor="audio">Recorder voice</InputLabel>
       <TextField
         //type="file"
         name="audio"
         placeholder="Audio"
+        className={ classes.inputFieldClass }
         value={ audio }
         onChange={ onChange }
       />
-
+      <InputLabel htmlFor="prompt">Prompt</InputLabel>
       <TextField
         name="prompt"
         value={ prompt }
+        className={ classes.inputFieldClass }
+        label="In this sentence яблоко means apple"
         onChange={ onChange }
       />
 

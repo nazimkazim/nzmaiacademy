@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link, withRouter } from "react-router-dom";
 import { Container, Grid } from 'semantic-ui-react';
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { TextField, FormControl, InputLabel, FormHelperText, Select } from '@material-ui/core';
+import { TextField, FormControl, InputLabel, FormHelperText, Select, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useFormik } from "formik";
 
@@ -19,8 +19,11 @@ const useStyles = makeStyles((theme) => ({
     '& > *': {
       margin: theme.spacing(1),
       width: '55ch',
-    },
+    }
   },
+  customButton: {
+    marginBottom: 20
+  }
 }));
 
 function AddDialogue(props) {
@@ -42,23 +45,7 @@ function AddDialogue(props) {
       ]
     },
     onSubmit: (values) =>
-      props.createDialogue(dialog, props.history)
-  });
-
-  const [dialog, setDialog] = useState({
-    langPair: "",
-    note: "",
-    description: "",
-    parts: [
-      {
-        sentence: "",
-        translation: "",
-        speaker: "",
-        audio: "",
-        prompt: "",
-        helpers: [{ L1: "", L2: "" }]
-      }
-    ]
+      props.createDialogue(values, props.history)
   });
 
   const handlePartChange = (index) => (event) => {
@@ -98,44 +85,6 @@ function AddDialogue(props) {
             Go Back
             </Link>
           <h1 className="has-text-centered">Add Dialogue</h1>
-          {/* <Form onSubmit={ onSubmit }>
-            <Form.Field>
-              <SelectListGroup
-                placeholder="English"
-                name="langPair"
-                value={ dialog.langPair }
-                onChange={ onChange }
-                options={ langPairOptions } />
-            </Form.Field>
-            <Form.Field>
-              <Input
-                error
-                placeholder='Present perfect is used....'
-                name="note"
-                value={ dialog.note }
-                onChange={ onChange }
-              />
-            </Form.Field>
-            <Form.Field>
-              <Input
-                error
-                placeholder="This dialogue is intended to practice..."
-                name="description"
-                value={ dialog.description }
-                onChange={ onChange }
-              />
-            </Form.Field>
-            <div>{ dialog.parts.map((part, index) => <DialogPart part={ part } onChange={ () => onChangePart(null, index) } onRemove={ onRemovePart.bind(null, index) } />) }</div>
-            <button
-              type="button"
-              className="ui button primary"
-              onClick={ onAddPart }
-            >add more</button>
-            <button
-              type="submit"
-              className="ui button primary"
-            >Submit</button>
-          </Form> */}
           <form className={ classes.root } noValidate autoComplete="off" onSubmit={ handleSubmit }>
             <InputLabel htmlFor="language-pair">Language pair</InputLabel>
             <Select
@@ -154,21 +103,30 @@ function AddDialogue(props) {
             </Select>
 
             <InputLabel htmlFor="note">Note</InputLabel>
-            <TextField id="note" label="Present perfect is used to indicate that..." name="note" value={ values.note } onChange={ handleChange } onBlur={ handleBlur } />
-
+            <TextField
+              id="note"
+              label="Present perfect is used to indicate that..."
+              name="note"
+              value={ values.note }
+              onChange={ handleChange }
+              onBlur={ handleBlur }
+            />
             <InputLabel htmlFor="description">Description</InputLabel>
             <TextField id="description" label="In this dialog you will learn..." name="description" value={ values.description } onChange={ handleChange } />
-
-            <div>{ values.parts.map((part, index) => <DialogPart part={ part } onChange={ handlePartChange(index) } onRemove={ onRemovePart.bind(null, index) } handlePartHelpersChange={ setupPartHelpersChangeHandler(index) } />) }</div>
-            <button
-              type="button"
-              className="ui button primary"
+            <>
+              { values.parts.map((part, index) => <DialogPart
+                part={ part }
+                onChange={ handlePartChange(index) }
+                onRemove={ onRemovePart.bind(null, index) }
+                handlePartHelpersChange={ setupPartHelpersChangeHandler(index) }
+              />) }
+            </>
+            <Button variant="contained" className={ classes.customButton }
               onClick={ onAddPart }
-            >add more</button>
-            <button
+            >add more</Button>
+            <Button variant="contained" className={ classes.customButton }
               type="submit"
-              className="ui button primary"
-            >Submit</button>
+            >Submit</Button>
           </form>
         </Grid.Column>
       </Grid>
