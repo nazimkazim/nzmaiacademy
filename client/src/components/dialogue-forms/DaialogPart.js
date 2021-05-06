@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
 const DialogPart = (props) => {
   const classes = useStyles();
 
-  const { part = {}, onChange, onRemove, handlePartHelpersChange } = props;
+  const { part = {}, onChange, onRemove, handlePartHelpersChange, onAudioChange } = props;
   const {
     helpers = [],
     sentence = '',
@@ -60,6 +60,7 @@ const DialogPart = (props) => {
     });
     handlePartHelpersChange(updatedHelpers);
   };
+
 
   const onChangeHelper = (index, helper) => {
     const updatedHelpers = replaceArrayValueByIndex(helpers, index, helper);
@@ -92,19 +93,19 @@ const DialogPart = (props) => {
       <InputLabel htmlFor="translation">Translation</InputLabel>
       <TextField
         name="translation"
-        value={ translation }
         className={ classes.inputFieldClass }
         label="Я хочу это яблоко"
+        value={ translation }
         onChange={ onChange }
       />
       <InputLabel htmlFor="audio">Recorder voice</InputLabel>
       <TextField
-        //type="file"
+        type="file"
         name="audio"
         placeholder="Audio"
         className={ classes.inputFieldClass }
-        value={ audio }
-        onChange={ onChange }
+        value={ audio === '' && audio }
+        onChange={ onAudioChange }
       />
       <InputLabel htmlFor="prompt">Prompt</InputLabel>
       <TextField

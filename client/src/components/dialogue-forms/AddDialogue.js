@@ -57,6 +57,17 @@ function AddDialogue(props) {
     setFieldValue(`parts[${index}]`, updatedPart);
   };
 
+  const onAudioChange = (index) => (e) => {
+    console.log(e.target.files[0]);
+    const uploaded_file = e.target.files[0];
+    const updatedPart = {
+      ...values.parts[index],
+      audio: uploaded_file
+    };
+    setFieldValue(`parts[${index}]`, updatedPart);
+    console.log(updatedPart);
+  };
+
   const setupPartHelpersChangeHandler = (index) => (updatedHelpers) => {
     setFieldValue(`parts[${index}].helpers`, updatedHelpers);
   };
@@ -85,7 +96,7 @@ function AddDialogue(props) {
             Go Back
             </Link>
           <h1 className="has-text-centered">Add Dialogue</h1>
-          <form className={ classes.root } noValidate autoComplete="off" onSubmit={ handleSubmit }>
+          <form className={ classes.root } noValidate autoComplete="off" encType="multipart/form-data" onSubmit={ handleSubmit }>
             <InputLabel htmlFor="language-pair">Language pair</InputLabel>
             <Select
               native
@@ -115,6 +126,7 @@ function AddDialogue(props) {
             <TextField id="description" label="In this dialog you will learn..." name="description" value={ values.description } onChange={ handleChange } />
             <>
               { values.parts.map((part, index) => <DialogPart
+                onAudioChange={ onAudioChange(index) }
                 part={ part }
                 onChange={ handlePartChange(index) }
                 onRemove={ onRemovePart.bind(null, index) }

@@ -4,12 +4,15 @@ const { check, validationResult } = require("express-validator");
 const auth = require("../../middleware/auth");
 const User = require("../../models/User");
 const Dialogue = require("../../models/Dialogue");
+const multer = require('multer');
+const upload = multer({ dest: 'uploads' });
 
 // @route     DIALOGUE api/dialogue
 // @desc      Create a dialogue
 // @access    Private
 router.post(
   "/",
+  upload.single('audio'),
   [
     auth,
     [
@@ -25,22 +28,19 @@ router.post(
     }
 
     try {
-      console.log(req.parts);
       const user = await User.findById(req.user.id).select("-password");
       const newDialogue = new Dialogue({
         langPair: req.body.langPair,
         note: req.body.note,
         name: user.name,
-        description:req.body.description,
+        description: req.body.description,
         parts: req.body.parts,
         user: user.id
       });
-      newDialogue.parts.map(item => {
-        console.log(item.audio);
-      })
 
-      const dialogue = await newDialogue.save();
-      res.json(dialogue);
+      //const dialogue = await newDialogue.save();
+      //res.json(dialogue);
+      console.log(newDialogue);
     } catch (err) {
       console.log(err.message);
       res.status(500).send("Server error");
